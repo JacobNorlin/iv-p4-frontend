@@ -1,0 +1,12 @@
+body {
+    background-image: url("../resources/img/cartographer.png");
+}
+
+#map {
+    width: 500px;
+    height: 500px;
+}
+
+#turbineInfoModalDialog {
+    width: 1200px;
+}

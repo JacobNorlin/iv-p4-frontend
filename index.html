@@ -1,12 +1,66 @@
+<!DOCTYPE html>
 <html lang="en">
-	
     <head>
     	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="./src/bootstrap-notify-min.js"></script>
+        <script src="./build/bundle.js"></script>
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/bootstrap_darkly_min.css">
+        <!-- Latest compiled and minified CSS -->
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script src="src/app.js"></script>
+        <script src="src/jquery.tablesorter.min.js"></script>
     </head>
     <body>
-    	<script src="./build/bundle.js"></script>
-    	<div>
-    		
-    	</div>
+        <div class="container">
+            <h1>Wind Data</h1>
+            <div id="map"></div>
+            <span id="row"></span>
+        </div>
+
+        <div class="modal fade" id="turbineInfoModal" tabindex="-1" role="dialog">
+            <div id="turbineInfoModalDialog" class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 id="modalHeader" class="modal-title"></h4>
+                    </div>
+                    <div id="modalBody" class="modal-body">
+                        <table id="turbineTable" class="tablesorter">
+                            <thead>
+                                <th>Date</th>
+                                <th>End Time</th>
+                                <th>Wind Speed</th>
+                                <th>AC Primary Load</th>
+                                <th>Hugh Piggott</th>
+                                <th>AC Prim. Served</th>
+                                <th>Excess Electricity</th>
+                                <th>Unmet Load</th>
+                                <th>Capacity Shortage</th>
+                                <th>Inverter Input Power</th>
+                                <th>Inverter Output Power</th>
+                                <th>Rectifier Input Power</th>
+                                <th>Rectifier Output Power</th>
+                                <th>Battery Input Power</th>
+                                <th>Battery State of Charge</th>
+                                <th>Battery Energy Cost</th>
+                            </thead>
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- Need the map div to be built -->
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU&callback=initMap"></script>
     </body>
 </html>
