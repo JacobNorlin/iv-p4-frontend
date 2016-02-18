@@ -1,4 +1,5 @@
 "use strict";
+// need map global to perform updates
 var map;
 function initMap() {
     $.ajax({
@@ -48,13 +49,6 @@ function displayTurbineInfo(id) {
         crossDomain: true,
         dataType: 'jsonp',
         success: function(jsonp) {
-            $.notify({
-                // options
-                message: 'GET Request Success!'
-            },{
-                // settings
-                type: 'info'
-            });
             $.each(jsonp, function(rowIndex) {
                 var rowTuple = jsonp[rowIndex];
                 var tr = $("<tr/>");
@@ -81,47 +75,13 @@ function displayTurbineInfo(id) {
         error: function(err) {
             console.log(err);
             $.notify({
-                // options
                 message: 'GET Request failed!'
             },{
-                // settings
                 type: 'danger'
             }); }
-        //beforeSend: setHeader
     });
     $("#modalHeader").text("Turbine: " + id);
     $("#turbineInfoModal").modal("show");
 }
-
-
-
-/*
-$.ajax({
-    url: "http://localhost:3000/getTurbineDataFromdayById/1/2016/1/1",
-    type: 'GET',
-    crossDomain: true,
-    dataType: 'jsonp',
-    success: function(jsonp) {
-        $.notify({
-            // options
-            message: 'GET Request Success!'
-        },{
-            // settings
-            type: 'info'
-        });
-        console.log(jsonp);
-        $("#row").text(JSON.stringify(jsonp));
-    },
-    error: function(err) {
-        console.log(err);
-        $.notify({
-            // options
-            message: 'GET Request failed!'
-    },{
-        // settings
-        type: 'danger'
-    }); }
-    //beforeSend: setHeader
-});
 */
 
