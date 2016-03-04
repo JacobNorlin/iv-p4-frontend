@@ -3,7 +3,7 @@
 var map;
 function initMap() {
     $.ajax({
-        url: "http://localhost:3000/getTurbineLocations",
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com/getTurbineLocations",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -24,7 +24,6 @@ function initMap() {
                 // options
                 message: 'GET Request failed!'
             },{
-                // settings
                 type: 'danger'
             }); }
     });
@@ -42,9 +41,11 @@ function displayWindmill(id, lat, lng) {
         displayTurbineInfo(id);
     });
 }
+
+var fake_logs = {11: "Just fixed main rotor", 38:"General maintenance", 86:"Added sensors to link with Arduino"};
 function displayTurbineInfo(id) {
     $.ajax({
-        url: "http://localhost:3000/getTurbineDataFromdayById/" + id + "/2016/1/1",
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com/getTurbineDataFromdayById/" + id + "/2016/1/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -80,8 +81,47 @@ function displayTurbineInfo(id) {
                 type: 'danger'
             }); }
     });
+
+
     $("#modalHeader").text("Turbine: " + id);
+    $( "#slider-range" ).slider({
+        range: true,
+        min: 1,
+        max: 100,
+        values: [ 75, 300 ],
+        slide: function( event, ui ) {
+            $( "#timeRangeSlider" ).val( "Day " + ui.values[ 0 ] + " - Day " + ui.values[ 1 ] );
+            showMaintenanceLogs(ui.values[ 0 ], ui.values[ 1 ], id);
+        }
+    });
+    $( "#timeRangeSlider" ).val( "Day " + $( "#slider-range" ).slider( "values", 0 ) +
+        " - Day " + $( "#slider-range" ).slider( "values", 1 ) );
+    showMaintenanceLogs($( "#slider-range" ).slider( "values", 0 ), $( "#slider-range" ).slider( "values", 1 ), id);
     $("#turbineInfoModal").modal("show");
 }
-*/
 
+function showMaintenanceLogs(start, end, id) {
+    $("#maintenanceTable").empty();
+    $.each(fake_logs, function (key) {
+        if (key >= start && key <= end) {
+            if (!$('#maintenanceTableBody').length) {
+                $("#maintenanceTable").append('<tbody id="maintenanceTableBody">');
+            }
+            var tr = $('<tr/>');
+            tr.append("<td>" + key + "</td>");
+            tr.append("<td>" + fake_logs[key] + "</td>");
+            $("#maintenanceTableBody").append(tr);
+        }
+    });
+    if ($('#maintenanceTableBody').length){
+        var thead = $("<thead>");
+        var tr = $("<tr>");
+        tr.append($("<th>Date</th>"));
+        tr.append($("<th>Log Text</th>"));
+        thead.append(tr);
+        $('#maintenanceTable').prepend(thead);
+        $("#maintenanceTable").tablesorter();
+    } else {
+        $("#maintenanceItems").append($('<h2>').text("No results found for this time range!"));
+    }
+}

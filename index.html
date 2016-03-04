@@ -2,7 +2,9 @@
 <html lang="en">
     <head>
     	<meta http-equiv="content-type" content="text/html; charset=UTF8">
-        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="./src/bootstrap-notify-min.js"></script>
         <script src="./build/bundle.js"></script>
         <link rel="stylesheet" href="css/index.css">
@@ -26,27 +28,57 @@
                         <h4 id="modalHeader" class="modal-title"></h4>
                     </div>
                     <div id="modalBody" class="modal-body">
-                        <table id="turbineTable" class="tablesorter">
-                            <thead>
-                                <th>Date</th>
-                                <th>End Time</th>
-                                <th>Wind Speed</th>
-                                <th>AC Primary Load</th>
-                                <th>Hugh Piggott</th>
-                                <th>AC Prim. Served</th>
-                                <th>Excess Electricity</th>
-                                <th>Unmet Load</th>
-                                <th>Capacity Shortage</th>
-                                <th>Inverter Input Power</th>
-                                <th>Inverter Output Power</th>
-                                <th>Rectifier Input Power</th>
-                                <th>Rectifier Output Power</th>
-                                <th>Battery Input Power</th>
-                                <th>Battery State of Charge</th>
-                                <th>Battery Energy Cost</th>
-                            </thead>
+                        <div>
 
-                        </table>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
+                                    Graphs
+                                </a></li>
+                                <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data</a></li>
+                                <li role="presentation"><a href="#maintenance" aria-controls="messages" role="tab" data-toggle="tab">Maintenance</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="graph">
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="data">
+                                    <table id="turbineTable" class="tablesorter">
+                                        <thead>
+                                        <th>Date</th>
+                                        <th>End Time</th>
+                                        <th>Wind Speed</th>
+                                        <th>AC Primary Load</th>
+                                        <th>Hugh Piggott</th>
+                                        <th>AC Prim. Served</th>
+                                        <th>Excess Electricity</th>
+                                        <th>Unmet Load</th>
+                                        <th>Capacity Shortage</th>
+                                        <th>Inverter Input Power</th>
+                                        <th>Inverter Output Power</th>
+                                        <th>Rectifier Input Power</th>
+                                        <th>Rectifier Output Power</th>
+                                        <th>Battery Input Power</th>
+                                        <th>Battery State of Charge</th>
+                                        <th>Battery Energy Cost</th>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="maintenance">
+                                    <table id="maintenanceTable" class="tablesorter"></table>
+                                    <p>
+                                        <label for="timeRangeSlider">Time range:</label>
+                                        <input type="text" id="timeRangeSlider" readonly>
+                                    </p>
+                                    <div id="slider-range"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -55,7 +87,9 @@
                 </div>
             </div>
         </div>
+        <div>
 
+        </div>
         <!-- Need the map div to be built -->
         <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU&callback=initMap"></script>
