@@ -13,6 +13,22 @@ GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
 GoogleMapsLoader.load(function(google) {
     initMap();
 });
+
+import {HeatMap, parameters} from './HeatMap.js';
+
+function addHeatMapParameters(heatMap){
+    //Feel free to do this intelligently
+    document.getElementById("heatMapParameterSelector").innerHTML = ""
+    for(let par in parameters){
+        $("#heatMapParameterSelector").append("<li><a href='#'>"+par+"</a></li>");
+    }
+    $("#heatMapParameterSelector").on("click", (e) => {
+            let newVar = parameters[e.target.innerText];
+            heatMap.changeParameter(newVar);
+        });
+}
+
+
 var map;
 function initMap() {
     $.ajax({
@@ -87,6 +103,21 @@ function displayTurbineInfo(id) {
         }
     });
 
+    //ADD HEATMAP
+    $.ajax({
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getAverageValuesById/1",
+        type: 'GET',
+        crossDomain: true,
+        dataType: 'jsonp',
+        success: (data) => {
+            document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
+            let hm = new HeatMap({data: data, 
+                svg:"#heatmap",
+                width: 600,
+                height: 300,
+                parameter: parameters.excessElectricity})
+            addHeatMapParameters(hm);
+        }});
 
     $("#modalHeader").text("Turbine: " + id);
     $( "#slider-range" ).slider({
