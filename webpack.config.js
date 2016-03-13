@@ -4,7 +4,7 @@
    var HtmlWebpackPlugin = require('html-webpack-plugin');
    module.exports = {
     entry: {
-      app: ["webpack/hot/dev-server", "./src/app.js"],
+      app: "./src/app.js",
     },
     output: {
       path: path.resolve(__dirname, "build"),
@@ -32,6 +32,5 @@
     new HtmlWebpackPlugin({
       template: "index.html"
     }),
-    new webpack.HotModuleReplacementPlugin()
     ],
   };
