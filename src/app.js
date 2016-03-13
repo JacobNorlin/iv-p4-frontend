@@ -1,17 +1,12 @@
 "use strict";
 // need map global to perform updates
 var $ = require('jquery');
-require('cubism');
+var cubism = require('cubism');
 require('tablesorter');
 require('d3');
 require('jquery-ui');
-alert("hi");
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
 GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
-//GoogleMapsLoader.onLoad(function(google) {
-//    alert("hey2");
-//    initMap();
-//});
 GoogleMapsLoader.load(function(google) {
     initMap();
 });
@@ -35,12 +30,7 @@ function initMap() {
         },
         error: function(err) {
             console.log(err);
-            $.notify({
-                // options
-                message: 'GET Request failed!'
-            },{
-                type: 'danger'
-            }); }
+        }
     });
 }
 
@@ -60,7 +50,7 @@ function displayWindmill(id, lat, lng) {
 var fake_logs = {11: "Just fixed main rotor", 38:"General maintenance", 86:"Added sensors to link with Arduino"};
 function displayTurbineInfo(id) {
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com/getTurbineDataFromdayById/" + id + "/2016/1/1",
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getTurbineDataFromdayById/" + id + "/2016/1/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -91,11 +81,7 @@ function displayTurbineInfo(id) {
         },
         error: function(err) {
             console.log(err);
-            $.notify({
-                message: 'GET Request failed!'
-            },{
-                type: 'danger'
-            }); }
+        }
     });
 
 
@@ -113,6 +99,7 @@ function displayTurbineInfo(id) {
     $( "#timeRangeSlider" ).val( "Day " + $( "#slider-range" ).slider( "values", 0 ) +
         " - Day " + $( "#slider-range" ).slider( "values", 1 ) );
     showMaintenanceLogs($( "#slider-range" ).slider( "values", 0 ), $( "#slider-range" ).slider( "values", 1 ), id);
+    showCubism();
     $("#turbineInfoModal").modal("show");
 }
 
@@ -139,6 +126,50 @@ function showMaintenanceLogs(start, end, id) {
         $("#maintenanceTable").tablesorter();
     } else {
         $("#maintenanceItems").append($('<h2>').text("No results found for this time range!"));
+    }
+}
+
+function showCubism() {
+    var context = cubism.context()
+        .step(1e4)
+        .size(1440);
+
+    d3.select("#graph").selectAll(".axis")
+        .data(["top", "bottom"])
+        .enter().append("div")
+        .attr("class", function(d) { return d + " axis"; })
+        .each(function(d) { d3.select(this).call(context.axis().ticks(12).orient(d)); });
+
+    d3.select("#graph").append("div")
+        .attr("class", "rule")
+        .call(context.rule());
+
+    d3.select("#graph").selectAll(".horizon")
+        .data(d3.range(1, 50).map(random))
+        .enter().insert("div", ".bottom")
+        .attr("class", "horizon")
+        .call(context.horizon().extent([-10, 10]));
+
+    context.on("focus", function(i) {
+        d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+    });
+
+    // Replace this with context.graphite and graphite.metric!
+    function random(x) {
+        var value = 0,
+            values = [],
+            i = 0,
+            last;
+        return context.metric(function(start, stop, step, callback) {
+            start = +start, stop = +stop;
+            if (isNaN(last)) last = start;
+            while (last < stop) {
+                last += step;
+                value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += x * .02)));
+                values.push(value);
+            }
+            callback(null, values = values.slice((start - stop) / step));
+        }, x);
     }
 }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF8">
+    	<meta http-equiv="content-type" content="text/html; charset=UTF8">
     </head>
     <body>
         <div class="container">
@@ -19,7 +19,6 @@
                     </div>
                     <div id="modalBody" class="modal-body">
                         <div>
-
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active"><a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
@@ -65,10 +64,7 @@
                                     <div id="slider-range"></div>
                                 </div>
                             </div>
-
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -77,62 +73,9 @@
                 </div>
             </div>
         </div>
-        <div>
-
-        </div>
-        <!-- Need the map div to be built
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU&callback=initMap"></script>
-        <script>-->
-        <!--<script>-->
-
-            <!--var context = cubism.context()-->
-                    <!--.step(1e4)-->
-                    <!--.size(1440);-->
-
-            <!--d3.select("#graph").selectAll(".axis")-->
-                    <!--.data(["top", "bottom"])-->
-                    <!--.enter().append("div")-->
-                    <!--.attr("class", function(d) { return d + " axis"; })-->
-                    <!--.each(function(d) { d3.select(this).call(context.axis().ticks(12).orient(d)); });-->
-
-            <!--d3.select("#graph").append("div")-->
-                    <!--.attr("class", "rule")-->
-                    <!--.call(context.rule());-->
-
-            <!--d3.select("#graph").selectAll(".horizon")-->
-                    <!--.data(d3.range(1, 50).map(random))-->
-                    <!--.enter().insert("div", ".bottom")-->
-                    <!--.attr("class", "horizon")-->
-                    <!--.call(context.horizon().extent([-10, 10]));-->
-
-            <!--context.on("focus", function(i) {-->
-                <!--d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");-->
-            <!--});-->
-
-            <!--// Replace this with context.graphite and graphite.metric!-->
-            <!--function random(x) {-->
-                <!--var value = 0,-->
-                        <!--values = [],-->
-                        <!--i = 0,-->
-                        <!--last;-->
-                <!--return context.metric(function(start, stop, step, callback) {-->
-                    <!--start = +start, stop = +stop;-->
-                    <!--if (isNaN(last)) last = start;-->
-                    <!--while (last < stop) {-->
-                        <!--last += step;-->
-                        <!--value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += x * .02)));-->
-                        <!--values.push(value);-->
-                    <!--}-->
-                    <!--callback(null, values = values.slice((start - stop) / step));-->
-                <!--}, x);-->
-            <!--}-->
-        <!--</script>-->
-
-            <meta http-equiv="content-type" content="text/html; charset=UTF8">
-            <script src="build/bundle.js"></script>
-            <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-            <link rel="stylesheet" href="css/index.css">
-            <link rel="stylesheet" href="css/bootstrap_darkly_min.css">
+        <script src="./build/bundle.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/bootstrap_darkly_min.css">
         </body>
 </html>
