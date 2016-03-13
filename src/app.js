@@ -5,6 +5,9 @@ var cubism = require('cubism');
 require('tablesorter');
 require('d3');
 require('jquery-ui');
+require('bootstrap-webpack');
+//css
+require('../css/index.css');
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
 GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
 GoogleMapsLoader.load(function(google) {
