@@ -31,6 +31,7 @@
       ),
     new HtmlWebpackPlugin({
       template: "index.html"
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
     ],
   };
