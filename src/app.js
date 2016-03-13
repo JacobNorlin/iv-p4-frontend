@@ -5,6 +5,10 @@ require('cubism');
 require('tablesorter');
 require('d3');
 require('jquery-ui');
+require('bootstrap-webpack');
+//css
+require('../css/index.css');
+
 alert("hi");
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
 GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
@@ -60,7 +64,7 @@ function displayWindmill(id, lat, lng) {
 var fake_logs = {11: "Just fixed main rotor", 38:"General maintenance", 86:"Added sensors to link with Arduino"};
 function displayTurbineInfo(id) {
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com/getTurbineDataFromdayById/" + id + "/2016/1/1",
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getTurbineDataFromdayById/" + id + "/2016/1/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
