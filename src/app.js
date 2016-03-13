@@ -1,9 +1,24 @@
 "use strict";
 // need map global to perform updates
+var $ = require('jquery');
+require('cubism');
+require('tablesorter');
+require('d3');
+require('jquery-ui');
+alert("hi");
+var GoogleMapsLoader = require('google-maps'); // only for common js environments
+GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
+//GoogleMapsLoader.onLoad(function(google) {
+//    alert("hey2");
+//    initMap();
+//});
+GoogleMapsLoader.load(function(google) {
+    initMap();
+});
 var map;
 function initMap() {
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com/getTurbineLocations",
+        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getTurbineLocations",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -50,6 +65,7 @@ function displayTurbineInfo(id) {
         crossDomain: true,
         dataType: 'jsonp',
         success: function(jsonp) {
+            console.log(jsonp);
             $.each(jsonp, function(rowIndex) {
                 var rowTuple = jsonp[rowIndex];
                 var tr = $("<tr/>");
@@ -125,3 +141,4 @@ function showMaintenanceLogs(start, end, id) {
         $("#maintenanceItems").append($('<h2>').text("No results found for this time range!"));
     }
 }
+
