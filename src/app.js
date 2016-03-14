@@ -16,6 +16,9 @@ GoogleMapsLoader.load(function(google) {
 
 import {HeatMap, parameters} from './HeatMap.js';
 
+
+var restBaseUrl = "http://ec2-52-37-141-220.us-west-2.compute.amazonaws.com:3001";
+
 function addHeatMapParameters(heatMap){
     //Feel free to do this intelligently
     document.getElementById("heatMapParameterSelector").innerHTML = ""
@@ -32,7 +35,7 @@ function addHeatMapParameters(heatMap){
 var map;
 function initMap() {
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getTurbineLocations",
+        url: restBaseUrl+"/getTurbineLocations",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -69,7 +72,7 @@ function displayWindmill(id, lat, lng) {
 var fake_logs = {11: "Just fixed main rotor", 38:"General maintenance", 86:"Added sensors to link with Arduino"};
 function displayTurbineInfo(id) {
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getTurbineDataFromdayById/" + id + "/2016/1/1",
+        url: restBaseUrl+"/getTurbineDataFromdayById/" + id + "/2016/1/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -105,7 +108,7 @@ function displayTurbineInfo(id) {
 
     //ADD HEATMAP
     $.ajax({
-        url: "http://ec2-54-88-180-198.compute-1.amazonaws.com:3000/getAverageValuesById/1",
+        url: restBaseUrl+"/getAverageValuesById/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
@@ -115,7 +118,8 @@ function displayTurbineInfo(id) {
                 svg:"#heatmap",
                 width: 600,
                 height: 300,
-                parameter: parameters.excessElectricity})
+                parameter: parameters.excessElectricity,
+                boxSize: 15})
             addHeatMapParameters(hm);
         }});
 
