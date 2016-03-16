@@ -6,15 +6,18 @@ require('tablesorter');
 require('d3');
 require('jquery-ui');
 require('bootstrap-webpack');
-//css
 require('../css/index.css');
+
+import {HeatMap, parameters} from './HeatMap.js';
+
+
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
 GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
 GoogleMapsLoader.load(function(google) {
     initMap();
 });
 
-import {HeatMap, parameters} from './HeatMap.js';
+
 
 
 var restBaseUrl = "http://ec2-52-37-141-220.us-west-2.compute.amazonaws.com:3001";
