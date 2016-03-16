@@ -22,7 +22,7 @@ class HeatMap{
 		.attr("width", cfg.width)
 		.attr("height", cfg.height);
 
-		this._drawHeatMap(cfg.data, cfg.parameter);
+		this._drawHeatMap(cfg.data, cfg.parameter, cfg.boxSize);
 	}
 
 	/**
@@ -41,16 +41,17 @@ class HeatMap{
 	@param data
 	@param parameter - initial coloring parameter
 	*/
-	_drawHeatMap(data, parameter){
+	_drawHeatMap(data, parameter, boxSize){
 		let row = 0;
 		let col = 0;
 		let i = 0;
+		let d = boxSize+6;
 		while(i < data.length){
 			if(col > 40){
 				col = 0;
 				row += 1;
 			}
-			this._drawRect(col*20,row*20);
+			this._drawRect(col*d,row*d, boxSize);
 			col += 1;
 			i += 1;	
 		}
@@ -65,9 +66,9 @@ class HeatMap{
 	/**
 	Draw a single rectangle
 	*/
-	_drawRect(x, y){
-		let h = 15;
-		let w = 15
+	_drawRect(x, y, boxSize){
+		let h = boxSize;
+		let w = boxSize;
 		this.svg.append("rect")
 		.attr("class", "box")
 		.attr("x", x)
@@ -85,10 +86,10 @@ TODO: Add more scales? At least make the parameters not be all one color if they
 */
 let zThScale = d3.scale.linear()
 .domain([0,100])
-.range(["red", "blue"]);
+.range(["#CD5959", "#6baed6"]);
 let percentageScale = d3.scale.linear()
-.domain([0,1])
-.range(["blue", "red"]);
+.domain([0,0.5])
+.range(["#6baed6", "#CD5959"]);
 var parameters = {
 	primaryLoad:  {parameter: "avg(ac_primary_load)", scale: percentageScale},
 	primaryServed: {parameter: "avg(ac_primary_served)", scale: percentageScale},

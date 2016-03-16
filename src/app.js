@@ -9,6 +9,7 @@ require('bootstrap-webpack');
 require('../css/index.css');
 
 import {HeatMap, parameters} from './HeatMap.js';
+import DataFetcher from './DataFetcher.js';
 
 
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
@@ -18,6 +19,9 @@ GoogleMapsLoader.load(function(google) {
 });
 
 
+
+let df = new DataFetcher();
+df.getTurbines().done(x => console.log(x))
 
 
 var restBaseUrl = "http://ec2-52-37-141-220.us-west-2.compute.amazonaws.com:3001";
@@ -119,10 +123,10 @@ function displayTurbineInfo(id) {
             document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
             let hm = new HeatMap({data: data, 
                 svg:"#heatmap",
-                width: 600,
-                height: 300,
+                width: 900,
+                height: 150,
                 parameter: parameters.excessElectricity,
-                boxSize: 15})
+                boxSize: 10})
             addHeatMapParameters(hm);
         }});
 
@@ -171,46 +175,55 @@ function showMaintenanceLogs(start, end, id) {
 }
 
 function showCubism() {
+
     var context = cubism.context()
-        .step(1e4)
-        .size(1440);
+    .serverDelay(0)
+    .clientDelay(0)
+    .step(1e3)
+    .size(700);
 
-    d3.select("#graph").selectAll(".axis")
-        .data(["top", "bottom"])
-        .enter().append("div")
-        .attr("class", function(d) { return d + " axis"; })
-        .each(function(d) { d3.select(this).call(context.axis().ticks(12).orient(d)); });
+    let inverter = random("Inverter Output Power");
+    let excess = random("Excess Electricity");
+    let bar = random("Wind Speed");
+    let battery = random("Battery Energy Cost");
 
-    d3.select("#graph").append("div")
-        .attr("class", "rule")
-        .call(context.rule());
 
-    d3.select("#graph").selectAll(".horizon")
-        .data(d3.range(1, 50).map(random))
-        .enter().insert("div", ".bottom")
-        .attr("class", "horizon")
-        .call(context.horizon().extent([-10, 10]));
+    d3.select("#graph").call(function(div) {
 
-    context.on("focus", function(i) {
-        d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+      div.append("div")
+      .attr("class", "axis")
+      .call(context.axis().orient("top"));
+
+      div.selectAll(".horizon")
+      .data([inverter, bar, excess, battery]) //add inverter.subtract(bar) if you need to
+      .enter().append("div")
+      .attr("class", "horizon")
+      .call(context.horizon().extent([-20, 20]));
+
+      div.append("div")
+      .attr("class", "rule")
+      .call(context.rule());
+
     });
 
-    // Replace this with context.graphite and graphite.metric!
-    function random(x) {
-        var value = 0,
-            values = [],
-            i = 0,
-            last;
-        return context.metric(function(start, stop, step, callback) {
-            start = +start, stop = +stop;
-            if (isNaN(last)) last = start;
-            while (last < stop) {
-                last += step;
-                value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += x * .02)));
-                values.push(value);
-            }
-            callback(null, values = values.slice((start - stop) / step));
-        }, x);
-    }
+    function random(name) {
+      var value = 0,
+      values = [],
+      i = 0,
+      last;
+      return context.metric(function(start, stop, step, callback) {
+        start = +start, stop = +stop;
+        if (isNaN(last)) last = start;
+        while (last < stop) {
+          last += step;
+          value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
+          values.push(value);
+      }
+      callback(null, values = values.slice((start - stop) / step));
+  }, name);
+  }
+  context.on("focus", function(i) {
+  d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
+});
 }
 

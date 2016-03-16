@@ -5,13 +5,15 @@
     </head>
     <body>
 
+
+
         <div class="container">
             <h1>Wind Data</h1>
             <div id="map"></div>
             <span id="row"></span>
         </div>
 
-        <div class="modal fade" id="turbineInfoModal" tabindex="-1" role="dialog">
+        <div class="modal fade" id="turbineInfoModal" tabindex="-1" role="dialog">  
             <div id="turbineInfoModalDialog" class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -19,61 +21,85 @@
                         <h4 id="modalHeader" class="modal-title"></h4>
                     </div>
                     <div id="modalBody" class="modal-body">
-                        <div>
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#graph" aria-controls="graph" role="tab" data-toggle="tab">
-                                    Graphs
-                                </a></li>
-                                <li role="presentation"><a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data</a></li>
-                                <li role="presentation"><a href="#maintenance" aria-controls="messages" role="tab" data-toggle="tab">Maintenance</a></li>
-                            </ul>
 
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="graph">
 
+
+                        <div class="container">
+                            <div class="col-sm-3" id="sidebar">
+                                <div class="row" id="turbineImg">
+                                    <img style="width:80%; height:100%" src="./img/wind-turbine.jpg"/>
                                 </div>
-                                <div role="tabpanel" class="tab-pane" id="data">
-                                    <table id="turbineTable" class="tablesorter">
-                                        <thead>
-                                        <th>Date</th>
-                                        <th>End Time</th>
-                                        <th>Wind Speed</th>
-                                        <th>AC Primary Load</th>
-                                        <th>Hugh Piggott</th>
-                                        <th>AC Prim. Served</th>
-                                        <th>Excess Electricity</th>
-                                        <th>Unmet Load</th>
-                                        <th>Capacity Shortage</th>
-                                        <th>Inverter Input Power</th>
-                                        <th>Inverter Output Power</th>
-                                        <th>Rectifier Input Power</th>
-                                        <th>Rectifier Output Power</th>
-                                        <th>Battery Input Power</th>
-                                        <th>Battery State of Charge</th>
-                                        <th>Battery Energy Cost</th>
-                                        </thead>
-                                    </table>
+                                <div class="row" id="turbineInfo">
+                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
                                 </div>
-                                <div role="tabpanel" class="tab-pane" id="maintenance">
-                                    <table id="maintenanceTable" class="tablesorter"></table>
-                                    <p>
-                                        <label for="timeRangeSlider">Time range:</label>
-                                        <input type="text" id="timeRangeSlider" readonly>
-                                    </p>
-                                    <div id="slider-range"></div>
+                                <div class="row" id="textSending">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#sendTextModal">Send text</button>
+                                </div>
+                            </div>
+                            <div class="col-sm-9">
+                                <div class="row" id="liveFeed">
+                                    <h2>Live Data</h2>
+                                    <div id="graph">
+                                    </div>
+                                </div>
+                                <div class="row" id="maintenanceLog">
+                                    <h2>Log</h2>
                                     <div id="heatmap"></div>
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        Parameters
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1">
-                                    </ul>
+                                    <div style="padding:10px">
+                                        <ul class="dropdown-menu" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1">
+                                        </ul>
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Parameters
+                                            <span class="caret"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="modal fade" id="sendTextModal" tabindex="-1" role="dialog">  
+                        <div id="sendTextModalDialog" class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 id="modalHeader" class="modal-title">Send text</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="input-group col-sm-10">
+                                                <span class="input-group-addon" id="basic-addon1">TO</span>
+                                                <input type="text" class="form-control" placeholder="Phone number" aria-describedby="basic-addon1">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            params
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label for="comment">Message:</label>
+                                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sendTextModal">Close</button>
+                                    <button type="button" class="btn btn-primary">Send</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
+
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Save changes</button>
