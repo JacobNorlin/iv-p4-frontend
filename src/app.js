@@ -350,7 +350,7 @@ function initMap(error, tza, weather) {
       .on("click", zoom);  
 
 
-    //initWind(weather);
+    initWind(weather);
 
     // Draw the lines
   map.selectAll('line')
