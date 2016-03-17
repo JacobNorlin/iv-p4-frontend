@@ -8,21 +8,15 @@ body {
 }
 
 
+
 #turbineInfoModalDialog {
     width: 1200px;
 }
 
-input[type=range] {
-    -webkit-appearance: none;
-    background-color: silver;
-    width: 200px;
-    height:20px;
+input{
+    max-width:40%;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    background-color: #666;
-    opacity: 0.5;
-    width: 20px;
-    height: 26px;
+textarea{
+    max-width:40%;
 }

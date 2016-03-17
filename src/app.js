@@ -9,7 +9,7 @@ require('bootstrap-webpack');
 require('../css/index.css');
 
 import {HeatMap, parameters} from './HeatMap.js';
-import DataFetcher from './DataFetcher.js';
+import RequestHandler from './RequestHandler.js';
 
 
 var GoogleMapsLoader = require('google-maps'); // only for common js environments
@@ -18,11 +18,9 @@ GoogleMapsLoader.load(function(google) {
     initMap();
 });
 
-
-
-let df = new DataFetcher();
-df.getTurbines().done(x => console.log(x))
-
+$("#sendTextButton").on('click', sendText);
+var requestHandler = new RequestHandler();
+var currentDataState = null;
 
 var restBaseUrl = "http://ec2-52-37-141-220.us-west-2.compute.amazonaws.com:3001";
 
@@ -33,9 +31,12 @@ function addHeatMapParameters(heatMap){
         $("#heatMapParameterSelector").append("<li><a href='#'>"+par+"</a></li>");
     }
     $("#heatMapParameterSelector").on("click", (e) => {
-            let newVar = parameters[e.target.innerText];
-            heatMap.changeParameter(newVar);
-        });
+        let newVar = parameters[e.target.innerText];
+        heatMap.changeParameter(newVar);
+        $("#dropdownMenu1").html(e.target.innerText+"<span class='caret'></span>");
+        // $(this).parents(".btn-group").find('.selection').val($(this).text());
+
+    });
 }
 
 
@@ -78,12 +79,24 @@ function displayWindmill(id, lat, lng) {
 
 var fake_logs = {11: "Just fixed main rotor", 38:"General maintenance", 86:"Added sensors to link with Arduino"};
 function displayTurbineInfo(id) {
+    $("#turbineId").text("Turbine: "+id);
+    $("#batteryCharge").empty();
+    $("#primaryLoad").empty();
+    $("#windSpeed").empty();
+    $("#message").empty();
+    $("#batteryChargeCheckbox").checked = false;
+    $("#primaryLoadCheckbox").checked = false;
+    $("#windSpeedCheckbox").checked = false;
+
+
+
     $.ajax({
         url: restBaseUrl+"/getTurbineDataFromdayById/" + id + "/2016/1/1",
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
         success: function(jsonp) {
+
             console.log(jsonp);
             $.each(jsonp, function(rowIndex) {
                 var rowTuple = jsonp[rowIndex];
@@ -115,12 +128,13 @@ function displayTurbineInfo(id) {
 
     //ADD HEATMAP
     $.ajax({
-        url: restBaseUrl+"/getAverageValuesById/1",
+        url: restBaseUrl+"/getAverageValuesById/"+id,
         type: 'GET',
         crossDomain: true,
         dataType: 'jsonp',
         success: (data) => {
             document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
+            currentDataState = data;
             let hm = new HeatMap({data: data, 
                 svg:"#heatmap",
                 width: 900,
@@ -147,6 +161,8 @@ function displayTurbineInfo(id) {
     showCubism();
     $("#turbineInfoModal").modal("show");
 }
+
+
 
 function showMaintenanceLogs(start, end, id) {
     $("#maintenanceTable").empty();
@@ -227,3 +243,57 @@ function showCubism() {
 });
 }
 
+
+function setUpTextingCheckboxes(){
+    let bcCheck = $("#batteryChargeCheckbox");
+    let plCheck = $("#primaryLoadCheckbox");
+    let wsCheck = $("#windSpeedCheckbox");
+    let sendTextComment = $("#sendTextComment");    
+
+
+    function addP(e, id, param){
+        let bc = $("#"+id);
+        if(e.target.checked){
+            bc.append(id+": "+currentDataState[364][param].toFixed(3));
+        }else{
+            bc.empty();
+        }
+    }
+
+    sendTextComment.on('input', e => {
+        console.log(e);
+        $("#message").text(e.target.value);
+    })
+    bcCheck.on('change', (e) => {
+        addP(e, "batteryCharge", parameters.batteryCharge.parameter);
+    })
+    plCheck.on('change', (e) => {
+        addP(e, "primaryLoad", parameters.primaryLoad.parameter);
+    })
+    wsCheck.on('change', (e) => {
+        addP(e, "windSpeed", parameters.windSpeed.parameter);
+    })
+}
+
+function sendText(){
+    let to = $("#sendTextPhoneNumber")[0].value;
+    function constructMessage(){
+        let bc = $("#batteryCharge").text();
+        let pl = $("#primaryLoad").text();
+        let ws = $("#windSpeed").text();
+        let msg =$("#message").text();
+        let turbine = $("#turbineId").text();
+
+        return turbine+"   "+bc+"   "+pl+"   "+ws+"   "+msg;//this is dumb
+    }
+
+    let msg = constructMessage();
+    console.log(msg);
+
+    if(msg && to){
+        requestHandler.sendText(to, msg).done(x => console.log(x))
+        // console.log(requestHandler.sendText(to, msg));
+    }
+}
+
+setUpTextingCheckboxes();

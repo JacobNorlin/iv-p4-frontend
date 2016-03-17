@@ -7,6 +7,7 @@
 
 
 
+
         <div class="container">
             <h1>Wind Data</h1>
             <div id="map"></div>
@@ -21,6 +22,18 @@
                         <h4 id="modalHeader" class="modal-title"></h4>
                     </div>
                     <div id="modalBody" class="modal-body">
+
+                        <div class="modal fade bs-example-modal-md" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel", id="heatMapModal">
+                          <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h4> Average values for day </h4>
+                            </div>
+                            <div id="heatMapModalContent" class="modal-body">
+                            </div>
+                          </div>
+                          </div>
+                      </div>
 
 
 
@@ -44,15 +57,16 @@
                                 </div>
                                 <div class="row" id="maintenanceLog">
                                     <h2>Log</h2>
-                                    <div id="heatmap"></div>
-                                    <div style="padding:10px">
-                                        <ul class="dropdown-menu" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1">
-                                        </ul>
+                                    <div class="row" id="heatmap"></div>
+                                    <div>
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             Parameters
                                             <span class="caret"></span>
                                         </button>
+                                        <ul class="dropdown-menu col-sm-offset-10" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1" role="menu">
+                                        </ul>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -68,30 +82,48 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 id="modalHeader" class="modal-title">Send text</h4>
+                                    <h4 id="sendTextModalHeader" class="modal-title">Send text</h4>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" id="sendTextModalBody">
                                     <div class="container">
                                         <div class="row">
-                                            <div class="input-group col-sm-10">
+                                            <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon1">TO</span>
-                                                <input type="text" class="form-control" placeholder="Phone number" aria-describedby="basic-addon1">
+                                                <input type="text" class="form-control  " placeholder="Phone number" aria-describedby="basic-addon1" id="sendTextPhoneNumber">
                                             </div>
                                         </div>
                                         <div class="row">
-                                            params
+                                            <label class="checkbox-inline">
+                                            <input type="checkbox" id="batteryChargeCheckbox" value="option1"> Battery charge
+                                          </label>
+                                          <label class="checkbox-inline">
+                                              <input type="checkbox" id="primaryLoadCheckbox" value="option2"> Primary Load
+                                          </label>
+                                          <label class="checkbox-inline">
+                                              <input type="checkbox" id="windSpeedCheckbox" value="option3"> Wind Speed
+                                          </label>
                                         </div>
                                         <div class="row">
                                             <div class="form-group">
                                                 <label for="comment">Message:</label>
-                                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                                                <textarea class="form-control" rows="5" id="sendTextComment"></textarea>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <p id="sendTextPrelimMessage">
+                                                <h4>Preliminary message</h4>
+                                                <p id="turbineId"></p>
+                                                <p id="batteryCharge"></p>
+                                                <p id="primaryLoad"></p>
+                                                <p id="windSpeed"></p>
+                                                <p id="message"></p>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#sendTextModal">Close</button>
-                                    <button type="button" class="btn btn-primary">Send</button>
+                                    <button type="button" class="btn btn-primary" id="sendTextButton">Send</button>
                                 </div>
                             </div>
                         </div>

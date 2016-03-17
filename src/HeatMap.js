@@ -2,6 +2,9 @@
 
 import d3 from 'd3';
 import _ from 'lodash';
+import $ from 'jquery';		
+require('bootstrap-webpack');
+
 
 /**
 Class for generating a d3 heatmap based on wind turbine data
@@ -21,7 +24,7 @@ class HeatMap{
 		this.svg = d3.select(cfg.svg).append("svg")
 		.attr("width", cfg.width)
 		.attr("height", cfg.height);
-
+		this.data = cfg.data;
 		this._drawHeatMap(cfg.data, cfg.parameter, cfg.boxSize);
 	}
 
@@ -58,7 +61,23 @@ class HeatMap{
 		this.svg.selectAll(".box")
 		.data(data)
 		.on("click", (e) => {//TODO, have this actually do something useful
-			console.log(e);
+			let heatMapModal = $("#heatMapModal");
+			let content = $("#heatMapModalContent");
+			let info = _.reduce(e, (result, value, key) => {
+				return result+"<b>"+key+"</b>: "+value+"\n";
+			},"")
+			content.empty();
+			content.append(info);
+			heatMapModal.modal("show");
+
+		})
+		.on('mouseover', function(e){
+			d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+			.style({'stroke-opacity':1,'stroke':'#00000'});
+		})
+		.on('mouseout', function(e){
+			d3.select(this.parentNode.appendChild(this)).transition().duration(300)
+        .style({'stroke-opacity':0,'stroke':'#00000'});
 		})
 		this.changeParameter(parameter);
 	}
@@ -90,6 +109,9 @@ let zThScale = d3.scale.linear()
 let percentageScale = d3.scale.linear()
 .domain([0,0.5])
 .range(["#6baed6", "#CD5959"]);
+let windScale = d3.scale.linear()
+	.domain([0,25])
+	.range(["#6baed6", "#CD5959"])
 var parameters = {
 	primaryLoad:  {parameter: "avg(ac_primary_load)", scale: percentageScale},
 	primaryServed: {parameter: "avg(ac_primary_served)", scale: percentageScale},
@@ -104,7 +126,7 @@ var parameters = {
 	rectifierInput: {parameter: "avg(recitifier_input_power)", scale: percentageScale},
 	rectifierOutput: {parameter: "avg(rectifier_output_power)", scale: percentageScale},
 	unmetLoad: {parameter: "avg(unmet_load)", scale: percentageScale},
-	windSpeed: {parameter: "avg(wind_speed)", scale: zThScale}
+	windSpeed: {parameter: "avg(windSpeed)", scale: windScale}
 }
 
 export {parameters, HeatMap}
