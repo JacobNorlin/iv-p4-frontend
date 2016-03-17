@@ -24,8 +24,16 @@ class HeatMap{
 		this.svg = d3.select(cfg.svg).append("svg")
 		.attr("width", cfg.width)
 		.attr("height", cfg.height);
+
+		this.legendWidth = cfg.legendWidth;
+		this.legendHeight = cfg.legendHeight;
+
+		this.legendSvg = d3.select(cfg.legendSvg).append("svg")
+		.attr("width", cfg.width)
+		.attr("height", 40);
 		this.data = cfg.data;
 		this._drawHeatMap(cfg.data, cfg.parameter, cfg.boxSize);
+		this._drawLegend(cfg.parameter, cfg.legendWidth, cfg.legendHeight);
 	}
 
 	/**
@@ -33,10 +41,51 @@ class HeatMap{
 	@param {Object} newVar - Object containing key to data object and a color scale
 	*/
 	changeParameter(newVar){
+		this.currentParameter = newVar;
 		this.svg.selectAll(".box")
 		.attr("fill", d => {
 			return newVar.scale(d[newVar.parameter]);
 		});
+		this._drawLegend(newVar, this.legendWidth, this.legendHeight)
+	}
+
+	_drawLegend(parameter, w, h){
+		let domain = parameter.scale.domain();
+		this.legendSvg.html("");
+		let colors = _.map(domain, x => {
+			return parameter.scale(x);
+		})
+
+		var gradient = this.legendSvg.append("defs")
+		.append("linearGradient")
+		.attr("id", "gradient")
+
+		//add stop points
+		for(let i = 1; i<=colors.length; i++){
+			let stopPercent = (100-(100/i));
+			gradient.append("stop")
+				.attr("offset", stopPercent+"%")
+				.attr("stop-color", colors[i-1])
+				.attr("stop-opacity", 1);
+
+			this.legendSvg.append("text")
+			.attr("x", w*(stopPercent/100))
+			.attr("y", 60)
+			.attr("font-size", 20)
+			.attr("fill", "black")
+			.text("TEEST");
+
+		}
+
+
+		let rect = this.legendSvg.append("rect")
+		.attr("width", w)
+		.attr("height", h)
+		.style("fill", "url(#gradient)");
+
+		// let a = rect.
+
+		// console.log(a);
 	}
 
 	/**
@@ -77,7 +126,7 @@ class HeatMap{
 		})
 		.on('mouseout', function(e){
 			d3.select(this.parentNode.appendChild(this)).transition().duration(300)
-        .style({'stroke-opacity':0,'stroke':'#00000'});
+			.style({'stroke-opacity':0,'stroke':'#00000'});
 		})
 		this.changeParameter(parameter);
 	}
@@ -110,8 +159,8 @@ let percentageScale = d3.scale.linear()
 .domain([0,0.5])
 .range(["#6baed6", "#CD5959"]);
 let windScale = d3.scale.linear()
-	.domain([0,25])
-	.range(["#6baed6", "#CD5959"])
+.domain([0,8,25])
+.range(["black", "#BBED79", "#CD5959"])
 var parameters = {
 	primaryLoad:  {parameter: "avg(ac_primary_load)", scale: percentageScale},
 	primaryServed: {parameter: "avg(ac_primary_served)", scale: percentageScale},
