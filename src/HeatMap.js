@@ -56,7 +56,7 @@ class HeatMap{
 			return parameter.scale(x);
 		})
 
-		var gradient = this.legendSvg.append("defs")
+		var gradient = this.legendSvg.append("g").append("defs")
 		.append("linearGradient")
 		.attr("id", "gradient")
 
@@ -68,10 +68,10 @@ class HeatMap{
 				.attr("stop-color", colors[i-1])
 				.attr("stop-opacity", 1);
 
-			gradient.append("text")
+			this.legendSvg.append("g").append("text")
 			.attr("x", w*(stopPercent/100))
 			.attr("y", 60)
-			.attr("font-size", 20)
+			// .attr("font-size", 20)
 			.attr("fill", "black")
 			.text("TEEST");
 
@@ -112,7 +112,7 @@ class HeatMap{
 		.on("click", (e) => {//TODO, have this actually do something useful
 			let heatMapModal = $("#heatMapModal");
 			let content = $("#heatMapModalContent");
-			let d = _.pick(parameters, ["batteryCharge", "primaryLoad", "windSpeed"]);
+			let d = _.pick(parameters, ["date", "batteryCharge", "primaryLoad", "windSpeed"]);
 			let init = "<table class='table'>"
 			let info = _.reduce(d, (result, value, key) => {
 				return result+"<tr><td><b>"+key+"</b></td><td>"+e[value.parameter]+"</td></tr>";
@@ -178,7 +178,8 @@ var parameters = {
 	rectifierInput: {parameter: "avg(recitifier_input_power)", scale: percentageScale},
 	rectifierOutput: {parameter: "avg(rectifier_output_power)", scale: percentageScale},
 	unmetLoad: {parameter: "avg(unmet_load)", scale: percentageScale},
-	windSpeed: {parameter: "avg(windSpeed)", scale: windScale}
+	windSpeed: {parameter: "avg(windSpeed)", scale: windScale},
+	date:{parameter: "date"}
 }
 
 export {parameters, HeatMap}
