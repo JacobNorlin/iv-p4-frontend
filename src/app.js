@@ -158,7 +158,7 @@ function displayTurbineInfo(id) {
     $( "#timeRangeSlider" ).val( "Day " + $( "#slider-range" ).slider( "values", 0 ) +
         " - Day " + $( "#slider-range" ).slider( "values", 1 ) );
     showMaintenanceLogs($( "#slider-range" ).slider( "values", 0 ), $( "#slider-range" ).slider( "values", 1 ), id);
-    showCubism();
+    // showCubism();
     $("#turbineInfoModal").modal("show");
 }
 
@@ -291,6 +291,7 @@ function sendText(){
     console.log(msg);
 
     if(msg && to){
+        $("#sendTextModal").modal("hide");
         requestHandler.sendText(to, msg).done(x => console.log(x))
         // console.log(requestHandler.sendText(to, msg));
     }

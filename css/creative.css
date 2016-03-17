@@ -182,8 +182,8 @@ header {
     min-height: auto;
     text-align: center;
     color: #fff;
-    /**background-image: url(../img/wind-turbine3.jpg);**/
-    background-color: grey;
+    /*background-image: url(../img/wind-turbine3.jpg);*/
+    background-image: url("../img/portfolio/background.png");
     background-position: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -268,8 +268,12 @@ header .header-content .header-content-inner p {
 .portfolio-box {
     display: block;
     position: relative;
-    margin: 0 auto;
+    margin: 10 auto;
     max-width: 650px;
+    width: 385px;
+    height:380px;
+
+
 }
 
 .portfolio-box .portfolio-box-caption {
@@ -469,12 +473,13 @@ fieldset[disabled] .btn-primary.active {
 }
 
 .image{
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     margin:-60px 0 0 -60px;
     -webkit-animation:spin 4s linear infinite;
     -moz-animation:spin 4s linear infinite;
     animation:spin 4s linear infinite;
+
 }
 
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
