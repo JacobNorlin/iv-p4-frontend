@@ -102,6 +102,7 @@ function displayTurbineInfo(id) {
         dataType: 'jsonp',
         success: (data) => {
             document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
+            $("#heatmapLegend").empty();
             currentDataState = data;
             let hm = new HeatMap({data: data, 
                 svg:"#heatmap",
