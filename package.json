@@ -23,6 +23,7 @@
     "html-webpack-plugin": "^2.10.0",
     "img-loader": "^1.2.2",
     "imports-loader": "^0.6.5",
+    "json-loader": "^0.5.4",
     "less": "^2.6.1",
     "less-loader": "^2.2.2",
     "style-loader": "^0.13.0",
@@ -37,6 +38,7 @@
     "classie": "^1.0.0",
     "cubism": "^1.6.0",
     "d3": "^3.5.14",
+    "d3-queue": "^2.0.3",
     "font-awesome": "^4.5.0",
     "font-awesome-webpack": "0.0.4",
     "google-maps": "^3.2.1",
@@ -45,6 +47,7 @@
     "jquery-ui": "^1.10.5",
     "lodash": "^4.6.1",
     "tablesorter": "^2.25.5",
+    "topojson": "^1.6.24",
     "wow": "0.0.6"
   }
 }

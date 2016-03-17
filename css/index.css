@@ -1,19 +1,43 @@
+    path {
+    	stroke-linejoin: round;
+    }
 
-#map {
-    width: 500px;
-    height: 500px;
-}
+    line {
+    	stroke: #555;
+    	stroke-width: 2px;
+    }
+
+    .background {
+    	fill: none;
+    	pointer-events: all;
+    }
+
+    .turbinerect {
+    	fill: #2394AE;
+    }
+
+    #regions {
+    	fill: #2394AE;
+    }
+
+    #regions .active {
+    	fill: orange;
+    }
+    #map {
+    	width: 500px;
+    	height: 500px;
+    }
 
 
 
-#turbineInfoModalDialog {
-    width: 1200px;
-}
+    #turbineInfoModalDialog {
+    	width: 1200px;
+    }
 
-input{
-    max-width:40%;
-}
+    input{
+    	max-width:40%;
+    }
 
-textarea{
-    max-width:40%;
-}
+    textarea{
+    	max-width:40%;
+    }
