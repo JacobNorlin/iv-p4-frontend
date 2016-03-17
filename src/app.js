@@ -106,13 +106,17 @@ function displayTurbineInfo(id) {
         dataType: 'jsonp',
         success: (data) => {
             document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
+            $("#heatmapLegend").empty();
             currentDataState = data;
             let hm = new HeatMap({data: data, 
                 svg:"#heatmap",
                 width: 900,
-                height: 150,
+                height: 200,
                 parameter: parameters.batteryCharge,
-                boxSize: 10})
+                boxSize: 14,
+                legendSvg: "#heatmapLegend",
+                legendWidth: 800,
+                legendHeight: 15})
             addHeatMapParameters(hm);
         }});
 
@@ -130,7 +134,7 @@ function displayTurbineInfo(id) {
     $( "#timeRangeSlider" ).val( "Day " + $( "#slider-range" ).slider( "values", 0 ) +
         " - Day " + $( "#slider-range" ).slider( "values", 1 ) );
     showMaintenanceLogs($( "#slider-range" ).slider( "values", 0 ), $( "#slider-range" ).slider( "values", 1 ), id);
-    // showCubism();
+    showCubism();
     $("#turbineInfoModal").modal("show");
 }
 
@@ -215,6 +219,56 @@ function sendText(){
         requestHandler.sendText(to, msg).done(x => console.log(x))
         // console.log(requestHandler.sendText(to, msg));
     }
+}
+
+function showCubism(){
+  function random(name) {
+  var value = 0,
+      values = [],
+      i = 0,
+      last;
+  return context.metric(function(start, stop, step, callback) {
+    start = +start, stop = +stop;
+    if (isNaN(last)) last = start;
+    while (last < stop) {
+      last += step;
+      value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += .2)));
+      values.push(value);
+    }
+    callback(null, values = values.slice((start - stop) / step));
+  }, name);
+}
+
+var context = cubism.context()
+    .serverDelay(0)
+    .clientDelay(0)
+    .step(1e3)
+    .size(800);
+
+// ADD THE TURBINES HERE
+var batteryCharge = random("Battery Charge");
+var windSpeed = random("Wind Speed");
+var primaryLoad = random("Primary Load");
+
+
+// CHANGE THE ID HERE
+d3.select("#graph").call(function(div) {
+
+  div.append("div")
+      .attr("class", "axis")
+      .call(context.axis().orient("top"));
+
+  div.selectAll(".horizon")
+      .data([batteryCharge, windSpeed, primaryLoad])
+    .enter().append("div")
+      .attr("class", "horizon")
+      .call(context.horizon().extent([-20, 20]));
+
+  div.append("div")
+      .attr("class", "rule")
+      .call(context.rule());
+
+});
 }
 
 setUpTextingCheckboxes();

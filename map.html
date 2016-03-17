@@ -45,10 +45,15 @@
                         <div class="container">
                             <div class="col-sm-3" id="sidebar">
                                 <div class="row" id="turbineImg">
-                                    <img style="width:80%; height:100%" src="./img/wind-turbine.jpg"/>
+                                    <img style="width:80%; height:100%" src="./img/turbine.jpg"/>
                                 </div>
                                 <div class="row" id="turbineInfo">
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+                                    <p> <h4>Location - Kemgesi, Seregenti</h4>
+                                        <b>Battery Charging</b> - 24 V <br>
+                                        <b>Grid Connection</b> - 110 V <br>
+                                        <b>Rotor dimension</b> - 3.0 m <br>
+                                        <b>Peak Power</b> - 1kW        <br>
+                                        <b>Rated Power</b> - 800 W</p> 
                                 </div>
                                 <div class="row" id="textSending">
                                     <button class="btn btn-default" data-toggle="modal" data-target="#sendTextModal">Send text</button>
@@ -57,11 +62,12 @@
                             <div class="col-sm-9">
                                 <div class="row" id="liveFeed">
                                     <h2>Live Data</h2>
-
+                                    <div id="graph"></div>
                                 </div>
                                 <div class="row" id="maintenanceLog">
                                     <h2>Log</h2>
-                                    <div class="row" id="heatmap"></div>
+                                    <div id="heatmap"></div>
+                                    <div id="heatmapLegend"></div>
                                     <div>
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             batteryCharge
@@ -85,7 +91,7 @@
                         <div id="sendTextModalDialog" class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 id="sendTextModalHeader" class="modal-title">Send text</h4>
+                                    <h4 id="sendTextModalHeader" class="modal-title">Send text message</h4>
                                 </div>
                                 <div class="modal-body" id="sendTextModalBody">
                                     <div class="container">
