@@ -107,7 +107,7 @@ function displayTurbineInfo(id) {
                 svg:"#heatmap",
                 width: 900,
                 height: 150,
-                parameter: parameters.excessElectricity,
+                parameter: parameters.batteryCharge,
                 boxSize: 10})
             addHeatMapParameters(hm);
         }});
@@ -302,9 +302,9 @@ function initMap(error, tza, weather) {
       .style("fill", function(d) {return d.turbineStatus ? "#60FF2D" : "red"})
       .on("click", function(d){turbineClick(d.id)})
       .on("mouseenter", mouseenterTurbine)
-      .on("mouseleave", mouseleaveTurbine);
+      .on("mouseleave", mouseleaveTurbine)
 
-    // initWind(weather);
+    initWind(weather);
 
     // Draw the lines
   g.selectAll('line')
@@ -343,7 +343,8 @@ function addTurbines() {
       .attr("width", barWidth)
       .attr("height", barHeight - 1)
       .on("mouseenter", mouseenterTurbine)
-      .on("mouseleave", mouseleaveTurbine);
+      .on("mouseleave", mouseleaveTurbine)
+      .on('click', (d) => (turbineClick(d.id)));
 
     //add text
     bar.append("text")
@@ -447,7 +448,7 @@ function lineAnimate(selection) {
 
 function initWind(weather) {
   var windData = weather.list;
-  for(i = 0; i < windData.length; i++) {
+  for(let i = 0; i < windData.length; i++) {
     var d = windData[i];
     var speed = d.wind.speed;
     var feelsLikeTemperature = d.main.temp;
@@ -464,7 +465,7 @@ function initWind(weather) {
       x1: x1y1[0],
       y1: x1y1[1],
       s: speed,
-      // f: feelsLikeTemperature,
+      f: feelsLikeTemperature,
       duration: 8000 / speed, /* pre-compute duration */
       delay: Math.random() * 1000 /* pre-compute delay */
     };
