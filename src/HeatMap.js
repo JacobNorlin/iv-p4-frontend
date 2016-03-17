@@ -56,6 +56,7 @@ class HeatMap{
 			return parameter.scale(x);
 		})
 
+
 		var gradient = this.legendSvg.append("g").append("defs")
 		.append("linearGradient")
 		.attr("id", "gradient")
@@ -66,15 +67,7 @@ class HeatMap{
 			gradient.append("stop")
 				.attr("offset", stopPercent+"%")
 				.attr("stop-color", colors[i-1])
-				.attr("stop-opacity", 1);
-
-			this.legendSvg.append("g").append("text")
-			.attr("x", w*(stopPercent/100))
-			.attr("y", 60)
-			// .attr("font-size", 20)
-			.attr("fill", "black")
-			.text("TEEST");
-
+				.attr("stop-opacity", 1);			
 		}
 
 
@@ -83,9 +76,13 @@ class HeatMap{
 		.attr("height", h)
 		.style("fill", "url(#gradient)");
 
-		// let a = rect.
-
-		// console.log(a);
+		for (let i = 0; i <= 10; i++) {
+			// max of domain
+			var val = domain[1] * i/10;
+			this.legendSvg.append("text")
+				.text(val)
+				.attr("offset", w * i/10);
+		}
 	}
 
 	/**
