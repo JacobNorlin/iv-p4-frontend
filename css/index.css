@@ -15,9 +15,18 @@
     .turbinerect {
     	fill: #2394AE;
     }
+    .image {
+
+    }
 
     #regions {
     	fill: #2394AE;
+    }
+
+    #checkboxDiv {
+        position:absolute;
+        right: 100px;
+        top:100px;
     }
 
     #regions .active {
@@ -27,9 +36,12 @@
     	width: 500px;
     	height: 500px;
     }
-
-
-
+    #panelDiv {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        background-color: #2394AE;
+    }
     #turbineInfoModalDialog {
     	width: 1200px;
     }

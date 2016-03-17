@@ -7,6 +7,10 @@ require('d3');
 require('jquery-ui');
 require('bootstrap-webpack');
 require('../css/index.css');
+var workingImg = require('../resources/img/working.png');
+var notWorkingImg = require('../resources/img/not_working.png');
+var workingImgHighlighted = require('../resources/img/working_highlighted.png');
+var notWorkingImgHighlighted = require('../resources/img/not_working_highlighted.png');
 import d3 from 'd3';
 import {queue} from 'd3-queue';
 
@@ -220,8 +224,13 @@ setUpTextingCheckboxes();
 
 
 var width = $(window).width(),
-    height = $(window).height(),
+    height = $(window).height()-100,
     centered;
+
+var barWidth = width/4,
+    barHeight = 100,
+    barx = 0,
+    bary = 0;
 
 var projection = d3.geo.mercator()
     .scale(3600)
@@ -231,22 +240,21 @@ var path = d3.geo.path()
     .projection(projection)
     .pointRadius(10);
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
+var map = d3.select("#mapDiv").append("svg")
+    .attr("width", width-barWidth)
     .attr("height", height);
 
-svg.append("rect")
+var panel = d3.select("#panelDiv").append("svg")
+    .attr("width", barWidth)
+    .attr("height", height);
+
+map.append("rect")
     .attr("class", "background")
     .attr("width", width)
     .attr("height", height)
-    .style("stroke","black")
-    .style("stroke-width", 3)
     .on("click", zoom);
 
 
-var g = svg.append("g");
-
-var piggott;
 var lines = [];
 $.ajax({
         url: "http://jnorlin.me:3001/getTurbineLocations",
@@ -254,10 +262,9 @@ $.ajax({
         crossDomain: true,
         dataType: 'jsonp',
         success: function(jsonp) {
-          piggott = jsonp;
           // buildMap();
           initMap(null, tzaJson, weatherJson)
-          addTurbines();
+          addTurbines(jsonp);
         },
         error: function(err) {
             console.log(err);
@@ -269,7 +276,7 @@ $.ajax({
             }); }
     });
 
-
+initCheckBoxes();
 //initiates and builds the map
 function buildMap() {
     queue()
@@ -280,34 +287,19 @@ function buildMap() {
 
 function initMap(error, tza, weather) {
   console.log(weather);
-  g.append("g")
+  map.append("g")
       .attr("id", "regions")
     .selectAll("path")
       .data(tza.features)
     .enter().append("path")
       .attr("d", path)
       .on("click", zoom);  
-  g.selectAll("circle")
-      .data(piggott)
-      .enter()
-      .append("circle")
-      .attr("cx", function(d) {
-          return projection([d.lng, d.lat])[0];
-      })
-      .attr("cy", function(d) {
-          return projection([d.lng, d.lat])[1];
-      })
-      .attr("r", 8)
-      .attr("id", function(d) {return "circle" + d.id;})
-      .style("fill", function(d) {return d.turbineStatus ? "#60FF2D" : "red"})
-      .on("click", function(d){turbineClick(d.id)})
-      .on("mouseenter", mouseenterTurbine)
-      .on("mouseleave", mouseleaveTurbine)
 
-    initWind(weather);
+
+    //initWind(weather);
 
     // Draw the lines
-  g.selectAll('line')
+  map.selectAll('line')
     .data(lines)
     .enter()
     .append("line")
@@ -315,33 +307,50 @@ function initMap(error, tza, weather) {
       x1: function(d) {return d.x0}, 
       y1: function(d) {return d.y0}
     })
+    .attr("visibility", "hidden")
     // .style('stroke', function(d) {return colourScale(d.f);})
     .call(lineAnimate);
 
 
 }
-function addTurbines() {
+function addTurbines(piggott) {
     //make the sidepanel
-    var bar = g.selectAll("g")
+    piggott[1]["status"] = 1;
+    console.log(piggott);
+    map.selectAll(".image")
+      .data(piggott)
+      .enter()
+      .append("image")
+      .attr("x", function(d) {
+          return projection([d.lng, d.lat])[0];
+      })
+      .attr("y", function(d) {
+          return projection([d.lng, d.lat])[1];
+      })
+      .attr("id", function(d) {return "circle" + d.id;})
+      .attr("xlink:href",function(d) {return d.status ? notWorkingImg : workingImg;})
+      .attr("width", 30)
+      .attr("height",30)
+      .on("click", function(d){turbineClick(d.id)})
+      .on("mouseenter", mouseenterTurbine)
+      .on("mouseleave", mouseleaveTurbine);
+
+  var bar = panel.selectAll("rect")
       .data(piggott)
       .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(0," + i * 51 + ")"; });
-    
-    var barWidth = 150;
-    var barHeight = 50;
-    var barx = 10;
-    var bary = 30;
+      .attr("transform", function(d, i) {
+       return "translate(0," + i * barHeight + ")"; });
 
     //add the rectangles
     bar.append("rect")
       .attr("class", "turbinerect")
-      .attr("id", function(d) { return "rect"+d.id; })
+      .attr("id", function(d) {return "rect"+d.id; })
       .attr("x", barx)
       .attr("y", bary)
-      .attr("rx", 5)
-      .attr("ry", 5)
       .attr("width", barWidth)
       .attr("height", barHeight - 1)
+      .style("stroke", "white")
+      .style("stroke-width", 3)
       .on("mouseenter", mouseenterTurbine)
       .on("mouseleave", mouseleaveTurbine)
       .on('click', (d) => (turbineClick(d.id)));
@@ -358,14 +367,20 @@ function addTurbines() {
 
     //add status text
     bar.append("text")
-      .attr("x", 15)
-      .attr("y", (2*barHeight / 3) + bary)
-      .attr("dy", ".35em")
+      .attr("x", barWidth - 80)
+      .attr("y", (barHeight / 3) + bary)
+      .attr("dy", ".38em")
       .style("fill", "white")
-      .text(function(d) {return d.turbineStatus ? "Status: Working" : "Status: Not working" })
+      .text("Status:")
       .on("mouseenter", mouseenterTurbine)
       .on("mouseleave", mouseleaveTurbine);
+     
 
+    bar.append("circle")
+      .attr("cx", barWidth - 20)
+      .attr("cy", (barHeight / 3) + bary)
+      .attr("r",8)
+      .style("fill", function(d) {return d.status ? "red" : "green"});
 
 }
 //zooming function
@@ -405,8 +420,7 @@ function turbineClick(id) {
 
 function mouseenterTurbine(d) {
   d3.select("#circle" + d.id)
-    .attr("r", 12)
-    .style("stroke", "yellow");
+    .attr("xlink:href",function(d) {return d.status ? notWorkingImgHighlighted : workingImgHighlighted;})
 
   d3.select("#rect" + d.id)
     .style("stroke", "yellow")
@@ -415,12 +429,11 @@ function mouseenterTurbine(d) {
 
 function mouseleaveTurbine(d) {
   d3.select("#circle" + d.id)
-    .attr("r", 8)
-    .style("stroke", "none");
+    .attr("xlink:href",function(d) {return d.status ? notWorkingImg : workingImg;});
 
   d3.select("#rect" + d.id)
-    .style("stroke", "none")
-    .style("stroke-width", 0);   
+    .style("stroke", "white")
+    .style("stroke-width", 3);   
 }
 
 
@@ -444,6 +457,21 @@ function lineAnimate(selection) {
     .duration(1000)
     .style('opacity', 0.1)
   .each('end', function() {d3.select(this).call(lineAnimate)});
+}
+
+function initCheckBoxes() {
+
+  $('#windCheckbox').click(function() {
+    var $this = $(this);
+    // $this will contain a reference to the checkbox   
+    if ($this.is(':checked')) {
+      map.selectAll("line")
+        .attr("visibility","visible");
+    } else {
+      map.selectAll("line")
+        .attr("visibility","hidden");      
+    }
+});
 }
 
 function initWind(weather) {
