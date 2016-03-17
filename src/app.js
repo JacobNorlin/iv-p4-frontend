@@ -106,11 +106,11 @@ function displayTurbineInfo(id) {
             let hm = new HeatMap({data: data, 
                 svg:"#heatmap",
                 width: 900,
-                height: 150,
+                height: 200,
                 parameter: parameters.batteryCharge,
-                boxSize: 10,
+                boxSize: 14,
                 legendSvg: "#heatmapLegend",
-                legendWidth: 650,
+                legendWidth: 800,
                 legendHeight: 15})
             addHeatMapParameters(hm);
         }});
@@ -238,11 +238,12 @@ var context = cubism.context()
     .serverDelay(0)
     .clientDelay(0)
     .step(1e3)
-    .size(960);
+    .size(800);
 
 // ADD THE TURBINES HERE
-var foo = random("foo"),
-    bar = random("bar");
+var batteryCharge = random("Battery Charge");
+var windSpeed = random("Wind Speed");
+var primaryLoad = random("Primary Load");
 
 
 // CHANGE THE ID HERE
@@ -253,7 +254,7 @@ d3.select("#graph").call(function(div) {
       .call(context.axis().orient("top"));
 
   div.selectAll(".horizon")
-      .data([foo, bar, foo.add(bar), foo.subtract(bar)])
+      .data([batteryCharge, windSpeed, primaryLoad])
     .enter().append("div")
       .attr("class", "horizon")
       .call(context.horizon().extent([-20, 20]));

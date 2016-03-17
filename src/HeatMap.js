@@ -68,7 +68,7 @@ class HeatMap{
 				.attr("stop-color", colors[i-1])
 				.attr("stop-opacity", 1);
 
-			this.legendSvg.append("text")
+			gradient.append("text")
 			.attr("x", w*(stopPercent/100))
 			.attr("y", 60)
 			.attr("font-size", 20)
@@ -112,9 +112,12 @@ class HeatMap{
 		.on("click", (e) => {//TODO, have this actually do something useful
 			let heatMapModal = $("#heatMapModal");
 			let content = $("#heatMapModalContent");
-			let info = _.reduce(e, (result, value, key) => {
-				return result+"<b>"+key+"</b>: "+value+"\n";
-			},"")
+			let d = _.pick(parameters, ["batteryCharge", "primaryLoad", "windSpeed"]);
+			let init = "<table class='table'>"
+			let info = _.reduce(d, (result, value, key) => {
+				return result+"<tr><td><b>"+key+"</b></td><td>"+e[value.parameter]+"</td></tr>";
+			},init)
+
 			content.empty();
 			content.append(info);
 			heatMapModal.modal("show");
