@@ -20,14 +20,6 @@ import weatherJson from 'json!../resources/data/weather.json';
 
 import {HeatMap, parameters} from './HeatMap.js';
 import RequestHandler from './RequestHandler.js';
-
-
-// var GoogleMapsLoader = require('google-maps'); // only for common js environments
-// GoogleMapsLoader.KEY = 'AIzaSyAGe-_v3CJKidJo4RJEXAfVRrhVNnEebpU';
-// GoogleMapsLoader.load(function(google) {
-//     initMap();
-// });
-
 $("#sendTextButton").on('click', sendText);
 var requestHandler = new RequestHandler();
 var currentDataState = null;
