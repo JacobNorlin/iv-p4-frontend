@@ -215,8 +215,6 @@ line {
     height: 500px;
 }
 
-
-
 #turbineInfoModalDialog {
     width: 1200px;
 }
@@ -227,4 +225,20 @@ input{
 
 textarea{
     max-width:40%;
+}
+
+#liveFeedAndLog {
+    padding: 0px 40px;
+}
+
+.row.vdivide > [class*='col-']:not(:last-child):after {
+    background: #e0e0e0;
+    width: 1px;
+    content: "";
+    display:block;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    right: 0;
+    min-height: 70px;
 }

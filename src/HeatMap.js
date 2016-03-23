@@ -81,7 +81,9 @@ class HeatMap{
 			var val = domain[1] * i/10;
 			this.legendSvg.append("text")
 				.text(val)
-				.attr("offset", w * i/10);
+				.attr("x", w * i/10)
+				.attr("y", h/2)
+				.attr("alignment-baseline", "central");
 		}
 	}
 
@@ -95,10 +97,14 @@ class HeatMap{
 		let col = 0;
 		let i = 0;
 		let d = boxSize+6;
+		this._drawLabel(col*d,row*d + boxSize/2, 2*boxSize, boxSize, this._getFormattedDate(data[i].date));
+		col += 2;
 		while(i < data.length){
 			if(col > 40){
 				col = 0;
 				row += 1;
+				this._drawLabel(col*d,row*d + boxSize/2, 2*boxSize, boxSize, this._getFormattedDate(data[i].date));
+				col += 2;
 			}
 			this._drawRect(col*d,row*d, boxSize);
 			col += 1;
@@ -143,6 +149,22 @@ class HeatMap{
 		.attr("y", y)
 		.attr("height", h)
 		.attr("width", w);
+	}
+
+	_drawLabel(x, y, width, height, text) {
+		let h = height;
+		let w = width;
+		this.svg.append("text")
+			.attr("alignment-baseline", "central")
+			.attr("font-size", 8)
+			.attr("x", x)
+			.attr("y", y)
+			.text(text);
+	}
+
+	_getFormattedDate(dateStr) {
+		let date = new Date(dateStr);
+		return (date.getDay()+1).toString() + "/" + (date.getMonth()+1).toString() + "/" + (date.getYear()%100).toString();
 	}
 
 

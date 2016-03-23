@@ -23,7 +23,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 id="modalHeader" class="modal-title"></h4>
+                        <h2 id="modalHeader" class="modal-title text-center"></h2>
                     </div>
                     <div id="modalBody" class="modal-body">
 
@@ -40,8 +40,8 @@
                       </div>
 
 
-
                         <div class="container">
+                            <div class="row vdivide">
                             <div class="col-sm-3" id="sidebar">
                                 <div class="row" id="turbineImg">
                                     <img style="width:80%; height:100%" src="./img/turbine.jpg"/>
@@ -58,28 +58,39 @@
                                     <button class="btn btn-default" data-toggle="modal" data-target="#sendTextModal">Send text</button>
                                 </div>
                             </div>
-                            <div class="col-sm-9">
+                            <div id="liveFeedAndLog" class="col-sm-9">
                                 <div class="row" id="liveFeed">
                                     <h2>Live Data</h2>
                                     <div id="graph"></div>
                                 </div>
+                                <hr/>
                                 <div class="row" id="maintenanceLog">
-                                    <h2>Log</h2>
-                                    <div id="heatmap"></div>
-                                    <div id="heatmapLegend"></div>
-                                    <div>
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            batteryCharge
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu col-sm-offset-10" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1" role="menu">
-                                        </ul>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h2>Log</h2>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <h4>From <span id="logStartDate"></span> to <span id="logEndDate"></span></h4>
+                                        <div>
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                batteryCharge
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu col-sm-offset-10" id="heatMapParameterSelector" aria-labelledby="dropdownMenu1" role="menu">
+                                            </ul>
+                                        </div>
                                     </div>
-
+                                    </div>
+                                    <br/>
+                                    <div class="row">
+                                        <div id="heatmap"></div>
+                                        <div id="heatmapLegend"></div>
+                                    </div>
                                 </div>
 
                             </div>
 
+                        </div>
                         </div>
                     </div>
 

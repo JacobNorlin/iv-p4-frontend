@@ -100,7 +100,12 @@ function displayTurbineInfo(id) {
             document.getElementById("heatmap").innerHTML = "" //TODO: FIX THIS
             $("#heatmapLegend").empty();
             currentDataState = data;
-            let hm = new HeatMap({data: data, 
+            console.log(data);
+            let startDate = new Date(data[0].date);
+            let endDate = new Date(data[data.length-1].date);
+            $("#logStartDate").text(startDate.getDay().toString() + "/" + (startDate.getMonth()+1).toString() + "/" + (startDate.getYear()%100).toString());
+            $("#logEndDate").text(endDate.getDay().toString() + "/" + (endDate.getMonth()+1).toString() + "/" + (endDate.getYear()%100).toString());
+            let hm = new HeatMap({data: data,
                 svg:"#heatmap",
                 width: 900,
                 height: 200,
@@ -110,9 +115,9 @@ function displayTurbineInfo(id) {
                 legendWidth: 800,
                 legendHeight: 15})
             addHeatMapParameters(hm);
-        }});
+            }});
 
-    $("#modalHeader").text("Turbine: " + id);
+    $("#modalHeader").text("Wind Turbine: " + id);
     $( "#slider-range" ).slider({
         range: true,
         min: 1,
