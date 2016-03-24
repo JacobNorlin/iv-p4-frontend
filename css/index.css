@@ -200,11 +200,11 @@ line {
 }
 
 .turbinerect {
-    fill: #2394AE;
+    fill: rgb(51, 122, 183);
 }
 
 #regions {
-    fill: #2394AE;
+    fill: rgb(51, 122, 183);
 }
 
 #regions .active {
