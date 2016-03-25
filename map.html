@@ -5,17 +5,33 @@
     </head>
     <body>
 
-
-
+        <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand">
+                        <img src="img\windmind_logo.png" alt="WindMind Logo" height="30px" width="30px"/>
+                    </a>
+                    <h2 class="navbar-text">WindMind</h2>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
 
         <div class="container">
             <!-- <div id="map"></div> -->
-            <span id="row"></span> 
+            <span id="row"></span>
             <div id="mapDiv"></div>
             <div id="panelDiv"></div>
-            <div id="checkboxDiv">
-                <input type="checkbox" id="windCheckbox">Toggle wind</input> 
-            </div>       
+            <div id="checkboxDiv" class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Overlay</h3>
+                </div>
+                <div class="panel-body">
+                    Toggle wind<input type="checkbox" id="windCheckbox"></input>
+                </div>
+            </div>
         </div>
         </div>
         <div class="modal fade" id="turbineInfoModal" tabindex="-1" role="dialog">  

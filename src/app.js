@@ -279,7 +279,7 @@ var width = $(window).width(),
     centered;
 
 var barWidth = width/4,
-    barHeight = 100,
+    barHeight = 70,
     barx = 0,
     bary = 0;
 
@@ -405,6 +405,8 @@ function addTurbines(piggott) {
       .on("mouseenter", mouseenterTurbine)
       .on("mouseleave", mouseleaveTurbine)
       .on('click', (d) => (turbineClick(d.id)));
+
+    $("body").attr("min-height", piggott.length * barHeight);
 
     //add text
     bar.append("text")

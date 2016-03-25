@@ -40,8 +40,8 @@
         position: absolute;
         top: 70px;
         left: 0;
-        background-color: #2394AE;
     }
+
     #turbineInfoModalDialog {
     	width: 1200px;
     }
@@ -192,6 +192,11 @@ path {
 line {
     stroke: #555;
     stroke-width: 2px;
+}
+
+
+#windCheckbox {
+    margin-left: 15px;
 }
 
 .background {
