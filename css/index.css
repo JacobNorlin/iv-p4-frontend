@@ -13,14 +13,14 @@
     }
 
     .turbinerect {
-    	fill: #2394AE;
+    	fill: #2caadf;
     }
     .image {
 
     }
 
     #regions {
-    	fill: #2394AE;
+    	fill: #2caadf;
     }
 
     #checkboxDiv {
@@ -205,11 +205,11 @@ line {
 }
 
 .turbinerect {
-    fill: rgb(51, 122, 183);
+  fill: #2caadf;
 }
 
 #regions {
-    fill: rgb(51, 122, 183);
+  fill: #2caadf;
 }
 
 #regions .active {

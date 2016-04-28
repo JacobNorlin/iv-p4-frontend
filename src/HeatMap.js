@@ -76,11 +76,17 @@ class HeatMap{
 		.attr("height", h)
 		.style("fill", "url(#gradient)");
 
+		let unit = {"date" : "",
+			"avg(battery_state_of_charge)": "%",
+			"avg(ac_primary_load)": "kW",
+			"avg(windSpeed)": "m/s"
+		};
+		console.log(parameter.parameter);
 		for (let i = 0; i <= 10; i++) {
 			// max of domain
 			var val = domain[1] * i/10;
 			this.legendSvg.append("text")
-				.text(val)
+				.text(val + unit[parameter.parameter])
 				.attr("x", w * i/10)
 				.attr("y", h/2)
 				.attr("alignment-baseline", "central");
@@ -97,7 +103,14 @@ class HeatMap{
 		let col = 0;
 		let i = 0;
 		let d = boxSize+6;
-		this._drawLabel(col*d,row*d + boxSize/2, 2*boxSize, boxSize, this._getFormattedDate(data[i].date));
+		let day = 0;
+		let first_date = this._getFormattedDate(data[day].date);
+		while (first_date.startsWith("Na")) {
+			day++;
+			first_date = this._getFormattedDate(data[day].date);
+
+		}
+		this._drawLabel(col*d,row*d + boxSize/2, 2*boxSize, boxSize, first_date);
 		col += 2;
 		while(i < data.length){
 			if(col > 40){
@@ -117,8 +130,18 @@ class HeatMap{
 			let content = $("#heatMapModalContent");
 			let d = _.pick(parameters, ["date", "batteryCharge", "primaryLoad", "windSpeed"]);
 			let init = "<table class='table'>"
+			let unit = {"date" : "",
+				"batteryCharge": "%",
+				"primaryLoad": "kW",
+				"windSpeed": "m/s"
+			};
 			let info = _.reduce(d, (result, value, key) => {
-				return result+"<tr><td><b>"+key+"</b></td><td>"+e[value.parameter]+"</td></tr>";
+				let val = e[value.parameter];
+				if (key != "date") {
+					val = parseFloat(val).toFixed(2);
+					val += " " + unit[key];
+				}
+				return result+"<tr><td><b>"+key+"</b></td><td>"+val+"</td></tr>";
 			},init)
 
 			content.empty();
@@ -164,7 +187,8 @@ class HeatMap{
 
 	_getFormattedDate(dateStr) {
 		let date = new Date(dateStr);
-		return (date.getDay()+1).toString() + "/" + (date.getMonth()+1).toString() + "/" + (date.getYear()%100).toString();
+		let ret = (date.getDate()).toString() + "/" + (date.getMonth()+1).toString() + "/" + (date.getYear()%100).toString();
+		return ret
 	}
 
 

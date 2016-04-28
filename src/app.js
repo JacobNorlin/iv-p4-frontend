@@ -13,7 +13,6 @@ var workingImgHighlighted = require('../resources/img/working_highlighted.png');
 var notWorkingImgHighlighted = require('../resources/img/not_working_highlighted.png');
 import d3 from 'd3';
 import {queue} from 'd3-queue';
-
 import tzaJson from 'json!../resources/data/tza.json';
 import weatherJson from 'json!../resources/data/weather.json';
 
@@ -29,15 +28,16 @@ var restBaseUrl = "http://ec2-52-37-141-220.us-west-2.compute.amazonaws.com:3001
 function addHeatMapParameters(heatMap){
     //Feel free to do this intelligently
     document.getElementById("heatMapParameterSelector").innerHTML = ""
+    let valid_pars = new Set(["batteryCharge", "primaryLoad", "windSpeed"]);
     for(let par in parameters){
-        $("#heatMapParameterSelector").append("<li><a href='#'>"+par+"</a></li>");
+        if (valid_pars.has(par)) {
+          $("#heatMapParameterSelector").append("<li><a href='#'>"+par+"</a></li>");
+        }
     }
     $("#heatMapParameterSelector").on("click", (e) => {
         let newVar = parameters[e.target.innerText];
         heatMap.changeParameter(newVar);
         $("#dropdownMenu1").html(e.target.innerText+"<span class='caret'></span>");
-        // $(this).parents(".btn-group").find('.selection').val($(this).text());
-
     });
 }
 
@@ -101,10 +101,15 @@ function displayTurbineInfo(id) {
             $("#heatmapLegend").empty();
             currentDataState = data;
             console.log(data);
-            let startDate = new Date(data[0].date);
+            let firstValidDayIndex = 0;
+            while (data[firstValidDayIndex].date.startsWith("00")) {
+              firstValidDayIndex++;
+            }
+            let startDate = new Date(data[firstValidDayIndex].date);
             let endDate = new Date(data[data.length-1].date);
-            $("#logStartDate").text(startDate.getDay().toString() + "/" + (startDate.getMonth()+1).toString() + "/" + (startDate.getYear()%100).toString());
-            $("#logEndDate").text(endDate.getDay().toString() + "/" + (endDate.getMonth()+1).toString() + "/" + (endDate.getYear()%100).toString());
+
+            $("#logStartDate").text(startDate.getDate().toString() + "/" + (startDate.getMonth()+1).toString() + "/" + (startDate.getYear()%100).toString());
+            $("#logEndDate").text(endDate.getDate().toString() + "/" + (endDate.getMonth()+1).toString() + "/" + (endDate.getYear()%100).toString());
             let hm = new HeatMap({data: data,
                 svg:"#heatmap",
                 width: 900,
@@ -247,6 +252,7 @@ var batteryCharge = random("Battery Charge");
 var windSpeed = random("Wind Speed");
 var primaryLoad = random("Primary Load");
 
+$("#graph").empty();
 
 // CHANGE THE ID HERE
 d3.select("#graph").call(function(div) {
@@ -433,7 +439,7 @@ function addTurbines(piggott) {
       .attr("cx", barWidth - 20)
       .attr("cy", (barHeight / 3) + bary)
       .attr("r",8)
-      .style("fill", function(d) {return d.status ? "red" : "green"});
+      .style("fill", function(d) {return d.status ? "red" : "#43e106"});
 
 }
 //zooming function
@@ -476,8 +482,8 @@ function mouseenterTurbine(d) {
     .attr("xlink:href",function(d) {return d.status ? notWorkingImgHighlighted : workingImgHighlighted;})
 
   d3.select("#rect" + d.id)
-    .style("stroke", "yellow")
-    .style("stroke-width", 5);  
+    .style("stroke", "#43e106")
+    .style("stroke-width", 3);  
 }
 
 function mouseleaveTurbine(d) {
